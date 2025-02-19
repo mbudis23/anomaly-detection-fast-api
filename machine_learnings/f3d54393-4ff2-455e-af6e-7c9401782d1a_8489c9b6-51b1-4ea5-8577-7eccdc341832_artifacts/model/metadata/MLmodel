@@ -1,0 +1,70 @@
+artifact_path: model
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.11.8
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.2.2
+mlflow_version: 2.12.2
+model_size_bytes: 1097798
+model_uuid: 45fa7ec6c481490680bd3d0713b376a4
+run_id: 8489c9b6-51b1-4ea5-8577-7eccdc341832
+signature:
+  inputs: '[{"type": "double", "name": "Total_AppConnections", "required": true},
+    {"type": "double", "name": "Count_AppConnections", "required": true}, {"type":
+    "double", "name": "Maximum_AppConnections", "required": true}, {"type": "double",
+    "name": "Minimum_AppConnections", "required": true}, {"type": "double", "name":
+    "Average_AppConnections", "required": true}, {"type": "double", "name": "_BilledSize_AppConnections",
+    "required": true}, {"type": "double", "name": "Total_AppConnections_rolling_avg",
+    "required": true}, {"type": "double", "name": "Total_AppConnections_rolling_stddev",
+    "required": true}, {"type": "double", "name": "Count_AppConnections_rolling_avg",
+    "required": true}, {"type": "double", "name": "Count_AppConnections_rolling_stddev",
+    "required": true}, {"type": "double", "name": "Maximum_AppConnections_rolling_avg",
+    "required": true}, {"type": "double", "name": "Maximum_AppConnections_rolling_stddev",
+    "required": true}, {"type": "double", "name": "Minimum_AppConnections_rolling_avg",
+    "required": true}, {"type": "double", "name": "Minimum_AppConnections_rolling_stddev",
+    "required": true}, {"type": "double", "name": "Average_AppConnections_rolling_avg",
+    "required": true}, {"type": "double", "name": "Average_AppConnections_rolling_stddev",
+    "required": true}, {"type": "double", "name": "_BilledSize_AppConnections_rolling_avg",
+    "required": true}, {"type": "double", "name": "_BilledSize_AppConnections_rolling_stddev",
+    "required": true}, {"type": "integer", "name": "Year", "required": true}, {"type":
+    "integer", "name": "Month", "required": true}, {"type": "integer", "name": "Day",
+    "required": true}, {"type": "integer", "name": "DayOfWeek", "required": true},
+    {"type": "integer", "name": "Hour", "required": true}, {"type": "integer", "name":
+    "Minute", "required": true}, {"type": "integer", "name": "IsWeekend", "required":
+    true}, {"type": "integer", "name": "TimeBin_15min", "required": true}, {"type":
+    "double", "name": "Total_AppConnections_lag_5min", "required": true}, {"type":
+    "double", "name": "Total_AppConnections_lag_15min", "required": true}, {"type":
+    "double", "name": "Total_AppConnections_lag_30min", "required": true}, {"type":
+    "double", "name": "Total_AppConnections_lag_60min", "required": true}, {"type":
+    "double", "name": "Count_AppConnections_lag_5min", "required": true}, {"type":
+    "double", "name": "Count_AppConnections_lag_15min", "required": true}, {"type":
+    "double", "name": "Count_AppConnections_lag_30min", "required": true}, {"type":
+    "double", "name": "Count_AppConnections_lag_60min", "required": true}, {"type":
+    "double", "name": "Maximum_AppConnections_lag_5min", "required": true}, {"type":
+    "double", "name": "Maximum_AppConnections_lag_15min", "required": true}, {"type":
+    "double", "name": "Maximum_AppConnections_lag_30min", "required": true}, {"type":
+    "double", "name": "Maximum_AppConnections_lag_60min", "required": true}, {"type":
+    "double", "name": "Minimum_AppConnections_lag_5min", "required": true}, {"type":
+    "double", "name": "Minimum_AppConnections_lag_15min", "required": true}, {"type":
+    "double", "name": "Minimum_AppConnections_lag_30min", "required": true}, {"type":
+    "double", "name": "Minimum_AppConnections_lag_60min", "required": true}, {"type":
+    "double", "name": "Average_AppConnections_lag_5min", "required": true}, {"type":
+    "double", "name": "Average_AppConnections_lag_15min", "required": true}, {"type":
+    "double", "name": "Average_AppConnections_lag_30min", "required": true}, {"type":
+    "double", "name": "Average_AppConnections_lag_60min", "required": true}, {"type":
+    "double", "name": "_BilledSize_AppConnections_lag_5min", "required": true}, {"type":
+    "double", "name": "_BilledSize_AppConnections_lag_15min", "required": true}, {"type":
+    "double", "name": "_BilledSize_AppConnections_lag_30min", "required": true}, {"type":
+    "double", "name": "_BilledSize_AppConnections_lag_60min", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+utc_time_created: '2025-02-18 08:22:05.451917'
