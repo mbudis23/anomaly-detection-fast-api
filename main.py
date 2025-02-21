@@ -69,6 +69,7 @@ class InputIsolationForest(BaseModel):
     _BilledSize_AppConnections_lag_15min: float = 0.0
     _BilledSize_AppConnections_lag_30min: float = 0.0
     _BilledSize_AppConnections_lag_60min: float = 0.0
+    MetricsCode : int  = 0
 
 class LSTMInputData(BaseModel):
     Total_AppConnections: float
@@ -124,52 +125,35 @@ class LSTMInputRequest(BaseModel):
 @app.post("/predict/if")
 def predict_isolation_forest(data: InputIsolationForest):
     try:
-        # Konversi data ke array
         input_data = np.asarray([[getattr(data, field) for field in data.__annotations__]])
-        
-        # Prediksi dengan model Isolation Forest
         prediction = ml_isolation_forest.predict(input_data)[0]
+        if prediction == -1:
+            return {"is_anomaly": 1}
+        if prediction == 1:
+            return {"is_anomaly": 0}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
 
-        return {"model": "Isolation Forest", "prediction": int(prediction)}
+
+@app.post("/predict/lstm")
+def predict_lstm(data: LSTMInputData):
+    try:
+        data_dict = data.model_dump() 
+        selected_features = list(data_dict.keys())
+        input_array = np.array([data_dict[feature] for feature in selected_features], dtype=np.float32)
+        input_array = input_array.reshape(1, 1, 42)
+        output = ml_lstm_autoencoder.predict(input_array)
+        testMAE = np.mean(np.mean(np.abs(output - input_array), axis=1))
+        threshold = 0.439664205838787
+        if testMAE > threshold:
+            return {'is_anomaly': 1}
+        else :
+            return {'is_anomaly': 0}
+    except KeyError as e:
+        raise HTTPException(status_code=400, detail=f"Missing feature in input data: {str(e)}")
+    
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=f"Data processing error: {str(e)}")
     
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
-
-
-@app.post("/predict/lstm/")
-def predict_lstm_autoencoder(request: LSTMInputRequest):
-    try:
-        model_input_shape = ml_lstm_autoencoder.input_shape
-        expected_timesteps = model_input_shape[1]
-        expected_features = model_input_shape[2]
-
-        if len(request.data) == 1:
-            single_input = np.asarray([[request.data[0].dict().get(field, 0.0) for field in request.data[0].dict().keys()]], dtype=np.float32)
-
-            single_input[single_input == -1.0] = 0.0
-
-            input_data = np.tile(single_input, (expected_timesteps, 1))
-
-        elif len(request.data) == expected_timesteps:
-            input_data = np.asarray([[d.dict().get(field, 0.0) for field in d.dict().keys()] for d in request.data], dtype=np.float32)
-
-            input_data[input_data == -1.0] = 0.0
-
-        else:
-            raise ValueError(f"Expected 10 timesteps, but got {len(request.data)}.")
-
-        input_data = input_data.reshape((1, expected_timesteps, expected_features))
-
-        reconstructed = ml_lstm_autoencoder.predict(input_data)
-
-        mse = np.mean(np.abs(input_data - reconstructed), axis=(1, 2))
-
-        threshold = 0.02
-        anomaly = 1 if mse[0] > threshold else 0
-
-        return {"model": "LSTM Autoencoder", "prediction": anomaly, "mse": mse[0].tolist()}
-
-    except ValueError as ve:
-        raise HTTPException(status_code=400, detail=f"Input data error: {str(ve)}")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
